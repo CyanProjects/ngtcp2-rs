@@ -127,6 +127,11 @@ fn main() {
             .define("HAVE_BORINGSSL", None)
             .file("ngtcp2/crypto/boringssl/boringssl.c");
     }
+    if cfg!(feature = "openssl") {
+        cfg
+            .define("HAVE_OPENSSL", None)
+            .file("ngtcp2/crypto/ossl/ossl.c");
+    }
 
     if target.contains("windows") {
         // Apparently MSVC doesn't have `ssize_t` defined as a type
