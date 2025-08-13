@@ -1,0 +1,21 @@
+[package]
+name = "libngtcp2-sys"
+version = "0.0.1+1.14.0"
+authors = ["Cyan Changes <contact@cyans.me>", "Alex Crichton <alex@alexcrichton.com>"]
+links = 'ngtcp2'
+license = "MIT/Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/CyanProjects/ngtcp2-rs"
+homepage = "https://github.com/CyanProjects/ngtcp2-rs"
+description = """
+FFI bindings for libngtcp2 (ngtcp2)
+"""
+
+[lib]
+doctest = false
+
+[dependencies]
+libc = '0.2'
+
+[build-dependencies]
+cc = "1.2.32"
