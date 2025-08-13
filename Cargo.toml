@@ -19,3 +19,6 @@ libc = '0.2'
 
 [build-dependencies]
 cc = "1.2.32"
+
+[features]
+quictls = []
