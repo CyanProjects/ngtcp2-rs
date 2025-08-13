@@ -65,6 +65,9 @@ fn main() {
     let mut cfg = cc::Build::new();
     cfg.include("ngtcp2/lib/includes")
         .include(&include)
+        .include("ngtcp2/crypto")
+        .include("ngtcp2/lib")
+        .file("ngtcp2/crypto/shared.c")
         .file("ngtcp2/lib/ngtcp2_acktr.c")
         .file("ngtcp2/lib/ngtcp2_addr.c")
         .file("ngtcp2/lib/ngtcp2_balloc.c")
