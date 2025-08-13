@@ -65,6 +65,11 @@ fn main() {
 
     if cfg!(feature = "quictls") {
         cfg.define("HAVE_QUICTLS", None);
+        fs::copy(
+            "ngtcp2/crypto/includes/ngtcp2/ngtcp2_crypto_quictls.h",
+            include.join("ngtcp2/ngtcp2_crypto_quictls.h"),
+        )
+            .unwrap();
     }
 
     if target.contains("windows") {
