@@ -53,6 +53,15 @@ fn main() {
     )
         .unwrap();
 
+    for dirent_result in fs::read_dir("ngtcp2/crypto/includes/ngtcp2").unwrap() {
+        let dirent = dirent_result.unwrap();
+        fs::copy(
+            dirent.path(),
+            include.join("ngtcp2").join(dirent.file_name()),
+        )
+            .unwrap();
+    }
+
     let mut cfg = cc::Build::new();
     cfg.include("ngtcp2/lib/includes")
         .include(&include)
@@ -65,11 +74,6 @@ fn main() {
 
     if cfg!(feature = "quictls") {
         cfg.define("HAVE_QUICTLS", None);
-        fs::copy(
-            "ngtcp2/crypto/includes/ngtcp2/ngtcp2_crypto_quictls.h",
-            include.join("ngtcp2/ngtcp2_crypto_quictls.h"),
-        )
-            .unwrap();
     }
 
     if target.contains("windows") {
