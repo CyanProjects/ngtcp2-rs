@@ -22,3 +22,4 @@ cc = "1.2.32"
 
 [features]
 quictls = []
+boringssl = []

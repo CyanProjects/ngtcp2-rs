@@ -51,7 +51,7 @@ fn main() {
         "ngtcp2/lib/includes/ngtcp2/ngtcp2.h",
         include.join("ngtcp2/ngtcp2.h"),
     )
-        .unwrap();
+    .unwrap();
 
     for dirent_result in fs::read_dir("ngtcp2/crypto/includes/ngtcp2").unwrap() {
         let dirent = dirent_result.unwrap();
@@ -59,12 +59,13 @@ fn main() {
             dirent.path(),
             include.join("ngtcp2").join(dirent.file_name()),
         )
-            .unwrap();
+        .unwrap();
     }
 
     let mut cfg = cc::Build::new();
     cfg.include("ngtcp2/lib/includes")
-        .include(&include).file("ngtcp2/lib/ngtcp2_acktr.c")
+        .include(&include)
+        .file("ngtcp2/lib/ngtcp2_acktr.c")
         .file("ngtcp2/lib/ngtcp2_addr.c")
         .file("ngtcp2/lib/ngtcp2_balloc.c")
         .file("ngtcp2/lib/ngtcp2_bbr.c")
@@ -114,7 +115,14 @@ fn main() {
         .out_dir(&lib);
 
     if cfg!(feature = "quictls") {
-        cfg.define("HAVE_QUICTLS", None);
+        cfg
+            .define("HAVE_QUICTLS", None)
+            .file("ngtcp2/crypto/quictls/quictls.c");
+    }
+    if cfg!(feature = "boringssl") {
+        cfg
+            .define("HAVE_BORINGSSL", None)
+            .file("ngtcp2/crypto/boringssl/boringssl.c");
     }
 
     if target.contains("windows") {
