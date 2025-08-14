@@ -140,9 +140,9 @@ fn main() {
         cfg
             .define("HAVE_OPENSSL", None)
             .file("ngtcp2/crypto/ossl/ossl.c");
-        if let Some(path) = env::var_os("DEP_OPENSSL_ROOT") {
+        if let Some(path) = env::var_os("DEP_OPENSSL_INCLUDE") {
             let path = PathBuf::from(path);
-            cfg.include(path.join("include"));
+            cfg.include(path);
         }
     }
 
