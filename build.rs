@@ -115,6 +115,7 @@ fn main() {
         .define("NGHTTP3_STATICLIB", None)
         .define("HAVE_NETINET_IN", None)
         .define("HAVE_TIME_H", None)
+        .opt_level(3)
         .out_dir(&lib);
 
     if cfg!(feature = "quictls") {
@@ -136,15 +137,39 @@ fn main() {
             cfg.include(path.join("boringssl/src/include"));
         }
     }
+
+    for x in env::vars().map(|(k, v)| format!("{}={}", k, v)) {
+        println!("cargo:warning={x}");
+    }
+
     if cfg!(feature = "openssl") {
-        cfg
-            .define("HAVE_OPENSSL", None)
-            .file("ngtcp2/crypto/ossl/ossl.c");
-        if let Some(path) = env::var_os("DEP_OPENSSL_INCLUDE") {
-            let path = PathBuf::from(path);
-            cfg.include(path);
+        if cfg!(feature = "openssl-aws-lc") {
+            cfg
+                .define("HAVE_BORINGSSL", None)
+                .file("ngtcp2/crypto/boringssl/boringssl.c");
+            if let Some(path) = env::var_os("DEP_OPENSSL_INCLUDE") {
+                let path = PathBuf::from(path);
+                cfg.include(path);
+            }
+            if let Some(path) = env::var_os("DEP_OPENSSL_ROOT") {
+                let path = PathBuf::from(path);
+                cfg.include(path.join("include"));
+            }
+        } else {
+            cfg
+                .define("HAVE_OPENSSL", None)
+                .file("ngtcp2/crypto/ossl/ossl.c");
+            if let Some(path) = env::var_os("DEP_OPENSSL_INCLUDE") {
+                let path = PathBuf::from(path);
+                cfg.include(path);
+            }
+            if let Some(path) = env::var_os("DEP_OPENSSL_ROOT") {
+                let path = PathBuf::from(path);
+                cfg.include(path.join("include"));
+            }
         }
     }
+
 
     if target.contains("windows") {
         // Apparently MSVC doesn't have `ssize_t` defined as a type
