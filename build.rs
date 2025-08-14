@@ -121,16 +121,29 @@ fn main() {
         cfg
             .define("HAVE_QUICTLS", None)
             .file("ngtcp2/crypto/quictls/quictls.c");
+
+        if let Some(path) = env::var_os("DEP_QUICLTS_ROOT") {
+            let path = PathBuf::from(path);
+            cfg.include(path.join("include"));
+        }
     }
     if cfg!(feature = "boringssl") {
         cfg
             .define("HAVE_BORINGSSL", None)
             .file("ngtcp2/crypto/boringssl/boringssl.c");
+        if let Some(path) = env::var_os("DEP_BORINGSSL_ROOT") {
+            let path = PathBuf::from(path);
+            cfg.include(path.join("include"));
+        }
     }
     if cfg!(feature = "openssl") {
         cfg
             .define("HAVE_OPENSSL", None)
             .file("ngtcp2/crypto/ossl/ossl.c");
+        if let Some(path) = env::var_os("DEP_OPENSSL_ROOT") {
+            let path = PathBuf::from(path);
+            cfg.include(path.join("include"));
+        }
     }
 
     if target.contains("windows") {
