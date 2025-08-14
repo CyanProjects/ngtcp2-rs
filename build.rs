@@ -133,7 +133,7 @@ fn main() {
             .file("ngtcp2/crypto/boringssl/boringssl.c");
         if let Some(path) = env::var_os("DEP_BORINGSSL_ROOT") {
             let path = PathBuf::from(path);
-            cfg.include(path.join("include"));
+            cfg.include(path.join("boringssl/src/include"));
         }
     }
     if cfg!(feature = "openssl") {
